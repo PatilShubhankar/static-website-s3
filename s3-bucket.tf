@@ -43,7 +43,7 @@ resource "aws_s3_bucket_public_access_block" "my-static-website" {
 }
 
 resource "aws_s3_bucket_acl" "my-static-website-bucket-acl" {
-  acl = "private"
+  acl = "public-read"
   bucket = aws_s3_bucket.static-website-bucket.id
   depends_on = [ aws_s3_bucket_ownership_controls.my-static-website-control, aws_s3_bucket_public_access_block.my-static-website ]
 }
@@ -61,9 +61,7 @@ resource "aws_s3_bucket_policy" "bucket-policy" {
       "Effect": "Allow",
       "Resource": "arn:aws:s3:::${aws_s3_bucket.static-website-bucket.bucket}/*",
       "Principal": {
-        "AWS": [
-          "*"
-        ]
+        "Service": "cloudfront.amazonaws.com"
       }
     }
   ]
